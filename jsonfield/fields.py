@@ -62,7 +62,7 @@ class JSONField(models.Field):
             cursor.execute('SELECT \'{"a":"json object"}\'::json;')
         except (DatabaseError, pyodbc.ProgrammingError):
             transaction.savepoint_rollback(sid)
-            return 'text'
+            return connection.data_types[self.get_internal_type()]
         else:
             return 'json'
     
