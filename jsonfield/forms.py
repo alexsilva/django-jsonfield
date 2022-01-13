@@ -1,7 +1,8 @@
-from django import forms
-from django.utils import simplejson as json
+import json
 
-from widgets import JSONWidget
+from django import forms
+
+from jsonfield.widgets import JSONWidget
 
 
 class JSONFormField(forms.CharField):
@@ -20,12 +21,12 @@ class JSONFormField(forms.CharField):
         """
         if not value:
             return value
-        if isinstance(value, basestring):
+        if isinstance(value, str):
             try:
                 return json.loads(value)
-            except Exception, exc:
+            except Exception as exc:
                 raise forms.ValidationError(
-                    u'JSON decode error: %s' % (unicode(exc),)
+                    'JSON decode error: %s' % (exc,)
                 )
         else:
             return value

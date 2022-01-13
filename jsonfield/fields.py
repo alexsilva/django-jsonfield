@@ -1,20 +1,18 @@
+import json
+import pyodbc
 from django.core.exceptions import ValidationError
 from django.db import models, DatabaseError, transaction
-from django.utils import simplejson as json
 from django.utils.translation import ugettext_lazy as _
 
-from decimal import Decimal
-import datetime, pyodbc
+from jsonfield.forms import JSONFormField
+from jsonfield.utils import default
+from jsonfield.widgets import JSONWidget
 
-from utils import default
-from widgets import JSONWidget
-from forms import JSONFormField
 
 class JSONField(models.Field):
     """
     A field that will ensure the data entered into it is valid JSON.
     """
-    __metaclass__ = models.SubfieldBase
     default_error_messages = {
         'invalid': _(u"'%s' is not a valid JSON string.")
     }
@@ -59,8 +57,8 @@ class JSONField(models.Field):
     def db_type(self, connection):
         # Test to see if we support JSON
         cursor = connection.cursor()
+        sid = transaction.savepoint()
         try:
-            sid = transaction.savepoint()
             cursor.execute('SELECT \'{"a":"json object"}\'::json;')
         except (DatabaseError, pyodbc.ProgrammingError):
             transaction.savepoint_rollback(sid)
@@ -69,7 +67,7 @@ class JSONField(models.Field):
             return 'json'
     
     def to_python(self, value):
-        if isinstance(value, basestring):
+        if isinstance(value, str):
             if value == "":
                 if self.null:
                     return None
@@ -81,6 +79,9 @@ class JSONField(models.Field):
                 msg = self.error_messages['invalid'] % str(value)
                 raise ValidationError(msg)
         # TODO: Look for date/time/datetime objects within the structure?
+        return value
+
+    def from_db_value(self, value, expression, connection, context):
         return value
 
     def get_db_prep_value(self, value, connection=None, prepared=None):
@@ -114,6 +115,7 @@ class JSONField(models.Field):
 
     def value_to_string(self, obj):
         return self._get_val_from_obj(obj)
+
 
 class TypedJSONField(JSONField):
     """

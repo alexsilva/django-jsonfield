@@ -1,14 +1,15 @@
-from django import forms
-from django.utils import simplejson as json
-from django.conf import settings
+import json
 
-from utils import default
+from django import forms
+
+from jsonfield.utils import default
+
 
 class JSONWidget(forms.Textarea):
     def render(self, name, value, attrs=None):
         if value is None:
             value = ""
-        if not isinstance(value, basestring):
+        if not isinstance(value, str):
             value = json.dumps(value, indent=2, default=default)
         return super(JSONWidget, self).render(name, value, attrs)
 
