@@ -85,9 +85,6 @@ class JSONField(models.Field):
         if value is None:
             return value
         return self.to_python(value)
-
-    def get_db_prep_value(self, value, connection=None, prepared=None):
-        return self.get_prep_value(value)
     
     def get_prep_value(self, value):
         if value is None:
