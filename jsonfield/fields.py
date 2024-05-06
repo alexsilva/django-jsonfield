@@ -2,7 +2,7 @@ import json
 import pyodbc
 from django.core.exceptions import ValidationError
 from django.db import models, DatabaseError, transaction
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from jsonfield.forms import JSONFormField
 from jsonfield.utils import default
