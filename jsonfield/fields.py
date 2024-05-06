@@ -14,7 +14,7 @@ class JSONField(models.Field):
     A field that will ensure the data entered into it is valid JSON.
     """
     default_error_messages = {
-        'invalid': _(u"'%s' is not a valid JSON string.")
+        'invalid': _("'%s' is not a valid JSON string.")
     }
     description = "JSON object"
     

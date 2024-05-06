@@ -2,7 +2,7 @@ from django.db import models
 from jsonfield import JSONField
 
 class JSONFieldTestModel(models.Model):
-    json = JSONField(u"test", null=True, blank=True)
+    json = JSONField("test", null=True, blank=True)
     class Meta:
         app_label = 'jsonfield'
 
