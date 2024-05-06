@@ -159,7 +159,7 @@ class TypedJSONField(JSONField):
 try:
 	from south.modelsinspector import add_introspection_rules
 
-	add_introspection_rules([], ['^jsonfield\.fields\.JSONField'])
-	add_introspection_rules([], ['^jsonfield\.fields\.TypedJSONField'])
+	add_introspection_rules([], [r'^jsonfield\.fields\.JSONField'])
+	add_introspection_rules([], [r'^jsonfield\.fields\.TypedJSONField'])
 except ImportError:
 	pass
