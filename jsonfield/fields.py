@@ -82,7 +82,7 @@ class JSONField(models.Field):
 		# TODO: Look for date/time/datetime objects within the structure?
 		return value
 
-	def from_db_value(self, value, expression, connection, context):
+	def from_db_value(self, value, *args, **kwargs):
 		if value is None:
 			return value
 		return self.to_python(value)
